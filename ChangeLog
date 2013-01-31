@@ -1,5 +1,6 @@
 0.0.14,
   Translation updates:
+    Add Gujarati translation (Kartik Mistry)
     Add Dutch translation (thanks to Rejo Zenger)
     Add Serbian translation (thanks to Nikola Nenadic)
     Add Hungarian translation (thanks to vargaviktor)
@@ -18,6 +19,7 @@
   Disable all plugins
   Added opt-out from setting time zone to UTC
   Add Tor-JonDo-Preferences quick switch (patch by Karsten N)
+  Support for Whonix (http://whonix.sourceforge.net/)
   Improved security: better SSL enforcement
 
 0.0.13, 28 Sept 2012

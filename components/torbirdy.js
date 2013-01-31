@@ -194,6 +194,8 @@ const TORBIRDYPREFS = {
   "extensions.enigmail.addHeaders": false,
   // Use GnuPG's default comment for signed messages.
   "extensions.enigmail.useDefaultComment": true,
+  // Confirm before sending a signed/encrypted message.
+  "extensions.enigmail.confirmBeforeSend": true,
   // XXX: TODO --hidden-recipient should be used for each person but perhaps
   // --throw-keyids will be an OK stopgap?
   "extensions.enigmail.agentAdditionalParam":
@@ -490,6 +492,13 @@ TorBirdy.prototype = {
           }
         }
       }
+
+      // Clear the existing HTTP and SSL proxies.
+      // We restore these when TorBirdy is uninstalled.
+      this.prefs.setCharPref("network.proxy.http", "");
+      this.prefs.setIntPref("network.proxy.http_port", 0);
+      this.prefs.setCharPref("network.proxy.ssl", "");
+      this.prefs.setIntPref("network.proxy.ssl_port", 0);
 
       // Disable all plugins.
       for(var i = 0; i < this.plugins.length; i++) {
