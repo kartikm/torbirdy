@@ -1,3 +1,12 @@
+0.1.1,
+  Added a dialog for new users that is shown during the first-run
+  Do not confirm before sending an email if Enigmail is enabled; default
+  behavior changed from 0.1.0 (user opt-in allowed through the preferences)
+  Restore all account settings that were changed on uninstall
+  Allow the user to use Thunderbird's automatic configuration wizard in case
+  they don't want to use our manual account configuration wizard
+  Set the SOCKS port to 9150 to reflect the change in the latest TBB
+
 0.1.0, 11 Feb 2013
   Our first release in the Beta release series! Hooray!
   Translation updates:

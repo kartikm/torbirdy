@@ -42,7 +42,7 @@ const TORBIRDYPREFS = {
 
   // Configure Thunderbird to use the SOCKS5 proxy.
   "network.proxy.socks": "127.0.0.1",
-  "network.proxy.socks_port": 9050,
+  "network.proxy.socks_port": 9150,
   "network.proxy.socks_version": 5,
   "network.proxy.no_proxies_on": "localhost, 127.0.0.1",
 
@@ -149,8 +149,6 @@ const TORBIRDYPREFS = {
   "mailnews.message_display.allow_plugins": false,
   // Don't convert to our local date. This may matter in a reply, etc.
   "mailnews.display.original_date": true,
-  // Wrap a line at 72 characters.
-  "mailnews.wraplength": 72,
   // When replying to a message, set to: '%s'.
   // https://lists.torproject.org/pipermail/tor-talk/2012-May/024395.html
   "mailnews.reply_header_type": 1,
@@ -508,6 +506,32 @@ TorBirdy.prototype = {
       var accounts = this.acctMgr.accounts;
       for (var i = 0; i < accounts.Count(); i++) {
         var account = accounts.QueryElementAt(i, Ci.nsIMsgAccount).incomingServer;
+
+        // Save account settings for restoring later.
+        var key = account.key;
+        var restorePrefs = ["check_new_mail", "login_at_startup",
+                            "check_time", "download_on_biff",
+                            "socketType", "port", "authMethod"];
+        for (var j = 0; j < restorePrefs.length; j++) {
+          var pref = "mail.server.%serverkey%.".replace("%serverkey%", key);
+          var prefName = restorePrefs[j];
+          var prefToCall = pref + prefName;
+
+          if (this.prefs.prefHasUserValue(prefToCall)) {
+            var typePref = this.prefs.getPrefType(prefToCall);
+            if (typePref === 64) {
+              var currentPref = this.prefs.getIntPref(prefToCall);
+              this.prefs.setIntPref(RESTORE_BRANCH + prefToCall, currentPref);
+            }
+            if (typePref === 128) {
+              var currentPref = this.prefs.getBoolPref(prefToCall);
+              this.prefs.setBoolPref(RESTORE_BRANCH + prefToCall, currentPref);
+            }
+            TORBIRDY_OLDPREFS.push(prefToCall);
+          }
+        }
+
+        // Now apply the TorBirdy recommended settings.
         account.downloadOnBiff = false;
         account.loginAtStartUp = false;
         account.doBiff = false;
@@ -526,6 +550,8 @@ TorBirdy.prototype = {
         // For nsIMsgIncomingServer, socketType 3 is SSL, as compared to the
         // manual account configuration wizard (emailwizard.js), where it is 2.
         account.socketType = 3;
+        // Set the authentication to normal, connection is already encrypted.
+        account.authMethod = 3;
       }
     }
     this.prefs.setBoolPref("extensions.torbirdy.first_run", false);

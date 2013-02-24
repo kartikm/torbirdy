@@ -22,7 +22,7 @@ if (!org.torbirdy.prefs) org.torbirdy.prefs = new function() {
 
   pub.setDefaultPrefs = function() {
     pub.prefs.setCharPref("network.proxy.socks", "127.0.0.1");
-    pub.prefs.setIntPref("network.proxy.socks_port", 9050);
+    pub.prefs.setIntPref("network.proxy.socks_port", 9150);
     pub.prefs.clearUserPref("network.proxy.http");
     pub.prefs.clearUserPref("network.proxy.http_port");
     pub.prefs.clearUserPref("network.proxy.ssl");
@@ -320,6 +320,7 @@ if (!org.torbirdy.prefs) org.torbirdy.prefs = new function() {
     else {
       pub.prefs.setBoolPref(pub.prefBranch + 'enigmail.throwkeyid', true);
     }
+    // Confirm before sending - default: false
     var enigmail_confirmemail = pub.confirmemail.checked;
     var engimail_pref = "extensions.enigmail.confirmBeforeSend";
     if (enigmail_confirmemail) {
@@ -328,6 +329,14 @@ if (!org.torbirdy.prefs) org.torbirdy.prefs = new function() {
     } else {
       pub.prefs.setBoolPref(engimail_pref, false);
       pub.prefs.setBoolPref(pub.prefBranch + 'enigmail.confirmemail', false);
+    }
+
+    // Thunderbird's email wizard - default: false
+    var emailwizard = pub.emailwizard.checked;
+    if (emailwizard) {
+      pub.prefs.setBoolPref(pub.prefBranch + 'emailwizard', true);
+    } else {
+      pub.prefs.setBoolPref(pub.prefBranch + 'emailwizard', false);
     }
 
     if (index === 1) {
@@ -363,6 +372,7 @@ if (!org.torbirdy.prefs) org.torbirdy.prefs = new function() {
     pub.torification = document.getElementById('torbirdy-torification');
     pub.timezone = document.getElementById('torbirdy-timezone');
     pub.confirmemail = document.getElementById('torbirdy-confirm-email');
+    pub.emailwizard = document.getElementById('torbirdy-email-wizard');
 
     // Make sure the user really wants to change these settings.
     var warnPrompt = pub.prefs.getBoolPref("extensions.torbirdy.warn");
@@ -397,7 +407,7 @@ if (!org.torbirdy.prefs) org.torbirdy.prefs = new function() {
     // Tor.
     if (anonService === 0) {
       pub.socksHost.value = '127.0.0.1';
-      pub.socksPort.value = '9050';
+      pub.socksPort.value = '9150';
     }
 
     // JonDo/Whonix.
@@ -467,6 +477,14 @@ if (!org.torbirdy.prefs) org.torbirdy.prefs = new function() {
       pub.confirmemail.checked = true;
     } else {
       pub.confirmemail.checked = false;
+    }
+
+    // Thunderbird's email wizard - default: false
+    var emailWizard = pub.prefs.getBoolPref(pub.prefBranch + 'emailwizard');
+    if (emailWizard) {
+      pub.emailwizard.checked = true;
+    } else {
+      pub.emailwizard.checked = false;
     }
 
     // Load the email accounts.
