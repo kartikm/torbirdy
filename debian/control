@@ -2,6 +2,7 @@ Source: torbirdy
 Section: web
 Priority: optional
 Maintainer: Jacob Appelbaum <jacob@appelbaum.net>
+Uploaders: Kartik Mistry <kartik@debian.org>
 Build-Depends: cdbs, debhelper (>= 9), mozilla-devscripts (>= 0.16~)
 Standards-Version: 3.9.4
 Homepage: https://www.github.com/ioerror/torbirdy
